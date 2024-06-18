@@ -26,6 +26,7 @@ tasks:
            USER="{{.USER}}" \
            HOME="{{.HOME}}" \
            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           PKR_VAR_OPENSSH_VERSION="{{.OPENSSH_VERSION}}" \
            pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
                 --login \
                 --noprofile \

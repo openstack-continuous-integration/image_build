@@ -149,3 +149,8 @@ variable IMAGE_MEMBERS {
   type = list(string)
   default = [ ]
 }
+
+variable OPENSSH_VERSION {
+  description = "The OpenSSH commands version to use"
+  type = string
+}
