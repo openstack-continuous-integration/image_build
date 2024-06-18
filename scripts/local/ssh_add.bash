@@ -19,7 +19,8 @@ function main {
     #
     # add the packer key to the ssh agent
     #
-    ssh-add "${ssh_private_key_file_path}"
+    pkgx +openssh.com^${OPENSSH_VERSION} ssh-add \
+         "${ssh_private_key_file_path}"
 }
 
 main

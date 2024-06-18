@@ -11,7 +11,9 @@ function pp {
 function main {
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_POST_PROCESSOR_TASK_INSTALL}" == "Xtrue" ]; then
         local parent_dir="$(dirname $PWD)"
-        task --taskfile "${parent_dir}/Taskfile.yaml" provisioner:fetch
+        pkgx +taskfile.dev task \
+             --taskfile "${parent_dir}/Taskfile.yaml" \
+             provisioner:fetch
         #task provisioner:push
     else
         pp 'Set the environment variable PKR_VAR_CONSTRUCTOR_EXEC_POST_PROCESSOR_TASK_INSTALL to true to execute the constructor post-processor task'
