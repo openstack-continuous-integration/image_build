@@ -7,7 +7,7 @@ build {
   provisioner "shell-local" {
     environment_vars = [
       "PROJECT_REPO_PATH=${local.project_repo_path}",
-      "REMOTE_SSH_PRIVATE_KEY=${build.SSHPrivateKey}"
+      "REMOTE_SSH_PRIVATE_KEY=${build.SSHPrivateKey}",
       "OPENSSH_VERSION=${local.openssh_version}"
     ]
     script = "${local.constructor_repo_path}/scripts/local/ssh_add.bash"
