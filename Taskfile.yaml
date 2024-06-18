@@ -1,0 +1,89 @@
+version: '3'
+
+env:
+  COREUTILS_VERSION: '9.4'
+  BASH_VERSION: '5'
+  PACKER_VERSION: '1.10'
+  OPENSSH_VERSION: '9.7'
+  CONSTRUCTOR_REPO_PATH: '{{.TASKFILE_DIR}}'
+  PROJECT_REPO_PATH: '{{.ROOT_DIR}}'
+
+tasks:
+  default:
+    desc: list tasks
+    silent: true
+    cmds:
+    - task --list
+
+  packer:
+    vars:
+      PACKER_COMMAND: '{{.PACKER_COMMAND}}'
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
+           --split-string \
+           --ignore-environment \
+           USER="{{.USER}}" \
+           HOME="{{.HOME}}" \
+           PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent -s)"
+                source {{.PROJECT_REPO_PATH}}/build.env
+                pkgx +packer.io^{{.PACKER_VERSION}} packer \
+                     {{.PACKER_COMMAND}} .
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent -k
+      EOF
+  
+  init:
+    desc: Constructor init task
+    cmds:
+    - task: packer
+      vars:
+        PACKER_COMMAND: init
+
+  build:
+    desc: Constructor build task
+    cmds:
+    - task: packer
+      vars:
+        PACKER_COMMAND: build
+
+  get_ssh_key_path:
+    desc: Return temporary ssh key path
+    cmds:
+    - echo '{{.PROJECT_REPO_PATH}}/temp/packer_temporary_ssh_key'
+  
+  get_remote_fqdn:
+    cmds:
+    - echo "packer.build.local"
+
+  get_remote_user:
+    cmds:
+    - echo "{{.PKR_VAR_TARGET_SSH_USERNAME}}"
+
+  fetch:
+    desc: Locally fetch the VM artifact from the build cloud
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils env \
+            --split-string \
+            --ignore-environment \
+            PROJECT_REPO_PATH="{{.PROJECT_REPO_PATH}}" \
+            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+            USER="{{.USER}}" \
+            HOME="{{.HOME}}" \
+            pkgx +gnu.org/bash^5 bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+                source {{.PROJECT_REPO_PATH}}/build.env
+                {{.CONSTRUCTOR_REPO_PATH}}/scripts/local/openstack_image_fetch.bash
+            EOF
+
+  post-install:
+    desc: post-install
