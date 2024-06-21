@@ -10,7 +10,7 @@ env:
 
 tasks:
   default:
-    desc: list tasks
+    #desc: list tasks
     silent: true
     cmds:
     - task --list
