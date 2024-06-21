@@ -12,7 +12,7 @@ function main {
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_POST_PROCESSOR_TASK_INSTALL}" == "Xtrue" ]; then
         local parent_dir="$(dirname $PWD)"
         pkgx +taskfile.dev task \
-             --taskfile "${parent_dir}/Taskfile.yaml" \
+             --taskfile "${parent_dir}/Taskfile.yml" \
              provisioner:fetch
         #task provisioner:push
     else

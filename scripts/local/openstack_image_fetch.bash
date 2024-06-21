@@ -19,7 +19,7 @@ function Curl::Response::Get.code {
 function Openstack::Token.issue {
     local -r openstack_token_file_path="${1}"
 
-    openstack token issue \
+    pkgx openstack token issue \
               --format json \
             > "${openstack_token_file_path}"
 }

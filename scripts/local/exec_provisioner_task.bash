@@ -14,10 +14,10 @@ function main {
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL}" == "Xtrue" ]; then
         #ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
         pkgx +taskfile.dev task \
-             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yml \
              provisioner:install
         pkgx +taskfile.dev task \
-             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yml \
              provisioner:tests
              
     else
@@ -28,7 +28,7 @@ function main {
     #
     #cd "${CONSTRUCTOR_REPO_PATH}"
     pkgx +taskfile.dev task \
-         --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+         --taskfile ${PROJECT_REPO_PATH}/Taskfile.yml \
          constructor:post-install
 }
 
